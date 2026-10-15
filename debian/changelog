@@ -1,0 +1,1023 @@
+xdg-desktop-portal (1.20.0+ds-2ubuntu1+lindm.lifetime.1) zena; urgency=medium
+
+  * Backport session teardown on backend unique-owner loss or replacement.
+  * Preserve the normal Ubuntu 1.20.0+ds-2ubuntu1 packaging and patches for
+    native Mint 22.3 qualification.
+
+ -- radkawar <radkawar28@gmail.com>  Thu, 15 Oct 2026 19:07:59 +0100
+
+xdg-desktop-portal (1.20.0+ds-2ubuntu1) plucky; urgency=medium
+
+  * Merge with Debian. Remaining changes:
+    - Import Sebastian Wick's version of the Jan Horak WebExtensions
+      native messaging portal patch
+      + debian/patches/webextensions-portal.patch
+    - debian/salsa-ci.yml: Use Ubuntu recipe
+    - Remove -dev Recommends: fonts-inter-variable
+  * Add patch to temporarily disable the webextension build test
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Sat, 22 Mar 2025 19:58:12 -0400
+
+xdg-desktop-portal (1.20.0+ds-2) unstable; urgency=medium
+
+  * d/rules: Only enable as-installed tests if we're building that package
+  * d/rules: Enable tests whenever we are building as-installed tests.
+    Even if we will not actually run the tests at build-time, we still
+    need to enable the option if we want to install the as-installed
+    tests, and for that we need a subset of the tests' dependencies.
+    Thanks to Jeremy Bícha (Closes: #1101046)
+  * Standards-Version: 4.7.2 (no changes required)
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 22 Mar 2025 20:47:16 +0000
+
+xdg-desktop-portal (1.20.0+ds-1ubuntu1) plucky; urgency=medium
+
+  * Merge with Debian. Remaining change:
+    - Import https://github.com/flatpak/xdg-desktop-portal/pull/705 as a
+      distro-patch (add a portal for managing WebExtensions native messaging
+      servers, LP: #1968215)
+      + debian/patches/webextensions-portal.patch
+    - debian/salsa-ci.yml: Use Ubuntu recipe
+  * Update the webextensions patch with the version from Jan Horak
+    as updated by Sebastian Wick
+  * Remove -dev Recommends: fonts-inter-variable (LP: #2100239)
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 21 Mar 2025 19:37:59 -0400
+
+xdg-desktop-portal (1.20.0+ds-1) unstable; urgency=medium
+
+  * New upstream stable release
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 20 Feb 2025 11:54:43 +0000
+
+xdg-desktop-portal (1.19.4+ds-1) unstable; urgency=medium
+
+  * New upstream development release
+  * d/patches: Drop patches that were applied upstream
+
+ -- Simon McVittie <smcv@debian.org>  Mon, 17 Feb 2025 13:31:49 +0000
+
+xdg-desktop-portal (1.19.3+ds-1) unstable; urgency=medium
+
+  [ Simon McVittie ]
+  * New upstream development release
+  * d/control: libportal-dev is no longer used for unit tests
+  * d/x-d-p.docs: NEWS is now named NEWS.md
+  * d/rules: Rename the pytest option to tests, following upstream
+  * d/control: Explicitly build-depend on python3-dbus.
+    It's used by dbusmock, and the upstream build system checks for it.
+  * d/p/notification-Escape-the-href-attribute-of-links-when-re-s.patch,
+    d/p/tests-Assert-that-href-attributes-are-escaped-correctly.patch,
+    d/p/notification-Escape-the-body-text-of-the-markup-body-when.patch,
+    d/p/tests-Assert-that-markup-body-text-is-escaped-correctly.patch:
+    Add patches from upstream to fix handling of XML in notifications
+  * Release to unstable (Closes: #1095098).
+    While this is still a development release, upstream intends to
+    release 1.20.x in time for the Debian 13 freeze, so it's better to
+    have wider testing at this stage.
+
+  [ Jeremy Bícha ]
+  * Update Homepage
+
+ -- Simon McVittie <smcv@debian.org>  Fri, 14 Feb 2025 18:08:24 +0000
+
+xdg-desktop-portal (1.19.2+ds-1ubuntu1) plucky; urgency=medium
+
+  * Merge with Debian. Remaining change:
+    - Import https://github.com/flatpak/xdg-desktop-portal/pull/705 as a
+      distro-patch (add a portal for managing WebExtensions native messaging
+      servers, LP: #1968215)
+      + debian/patches/webextensions-portal.patch
+  * debian/salsa-ci.yml: Use Ubuntu recipe
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Mon, 10 Feb 2025 11:25:38 -0500
+
+xdg-desktop-portal (1.19.2+ds-1) experimental; urgency=medium
+
+  * New upstream development release
+  * d/rules, d/tests: Set XDP_TEST_IN_CI instead of TEST_IN_CI.
+    The environment variable used to skip flaky tests and extend some
+    other tests' timeouts was renamed in this upstream development branch.
+  * d/control: Add dependencies to run pytest-based tests from autopkgtest
+  * d/copyright: Update
+  * d/p/debian/doc-Use-system-copy-of-Inter-Variable-font.patch:
+    Refresh patch
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 21 Jan 2025 14:45:35 +0000
+
+xdg-desktop-portal (1.19.1+ds-1) experimental; urgency=medium
+
+  * New upstream development release
+  * Drop patches that were included in 1.19.1
+  * d/p/tests-Set-XDG_DATA_DIRS-for-as-installed-testing.patch:
+    Add patch to fix test-portals-openuri.test during autopkgtest
+  * d/copyright: Update
+  * d/watch: Fix dversionmangle processing for +ds versions
+  * d/control: Update build-dependencies
+  * d/control: Depend on GStreamer plugins for WAV, Ogg Vorbis, Ogg Opus
+  * d/rules: Disable pytest-based tests if built with nocheck
+  * d/rules: Disable sandboxing of sound validation during build-time
+    testing, because bubblewrap can't work in a buildd chroot
+  * d/x-d-p.install: Install new x-d-p-validate-sound helper
+  * d/salsa-ci.yml: Use recommended recipe
+  * d/tests/control: Try treating installed-tests as stable.
+    We can mark them as flaky before re-uploading to unstable if this
+    turns out not to be the case.
+  * d/rules: Extend test timeouts on non-x86.
+    Some -ports architectures use qemu for buildds, which can be very
+    slow, and there is no official way to tell which architectures
+    do this.
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 02 Jan 2025 21:33:06 +0000
+
+xdg-desktop-portal (1.19.0+ds-1) experimental; urgency=medium
+
+  * New upstream development release
+  * d/copyright: Update
+  * Repack tarball to exclude vendored Inter Variable font from
+    documentation
+  * d/p/debian/doc-Use-system-copy-of-Inter-Variable-font.patch:
+    Add a patch to avoid using the vendored Inter Variable font, which
+    we remove
+  * d/copyright, d/watch: Update for exclusion of vendored web font
+  * Remove obsolete Lintian override for #1031037, fixed in
+    Lintian 2.117.0
+  * d/control, d/x-d-p-dev.docs, d/x-d-p-dev.doc-base:
+    Build HTML documentation using Sphinx; enable dh_sphinxdoc
+  * d/rules: Update Meson options.
+    sandboxed-image-validation is now a feature rather than a boolean.
+  * d/p/xdp_validate_icon-Assign-argument-indices-automatically.patch,
+    d/p/xdp_validate_icon-Allow-sandboxing-of-the-validator-to-be.patch,
+    d/rules:
+    Disable sandboxing of icon validation during build-time testing.
+    Some buildds build in a chroot, and bubblewrap can't work in that
+    environment.
+  * d/control: Add librsvg2-common to Recommends, Build-Depends,
+    test Depends. This is needed for SVG icon validation.
+  * d/control: Explicitly build-depend on bubblewrap
+  * d/control, d/rules: Only build documentation in arch-indep builds
+  * d/rules: Disable man pages under nodoc build profile
+  * Standards-Version: 4.7.0 (no changes required)
+
+ -- Simon McVittie <smcv@debian.org>  Wed, 30 Oct 2024 19:46:16 +0000
+
+xdg-desktop-portal (1.18.4-2) unstable; urgency=medium
+
+  * d/control, d/gbp.conf: Branch for changes targeting trixie.
+    The debian/latest branch has 1.19.x development releases, which are
+    packaged in experimental but haven't reached a sufficiently frozen
+    status to be considered for inclusion in Debian 13 yet.
+  * d/patches: Backport patches from 1.19.0 to fix test failure with
+    libportal 0.9.0 (Closes: #1091290)
+  * d/patches: Update to upstream 1.18.x branch commit 1.18.4-3-g45b5f7a4
+    - Improve ability to use camera portal from non-sandboxed host apps
+    - Add a missing NEWS entry
+  * d/control: Explicitly build-depend on bubblewrap
+  * d/control, d/rules: Only build documentation in arch-indep builds
+  * d/rules: Disable man pages under nodoc build profile
+  * d/x-d-p.lintian-overrides: Remove obsolete Lintian override for #1031037
+  * d/control: Standards-Version: 4.7.0 (no changes required)
+  * d/salsa-ci.yml: Use recommended recipe
+
+ -- Simon McVittie <smcv@debian.org>  Wed, 01 Jan 2025 18:51:00 +0000
+
+xdg-desktop-portal (1.18.4-1ubuntu4) oracular; urgency=medium
+
+  * Refresh webextensions portal patch to latest version proposed
+    upstream (LP: #2077587)
+
+ -- Amin Bandali <bandali@ubuntu.com>  Wed, 21 Aug 2024 20:13:17 -0400
+
+xdg-desktop-portal (1.18.4-1ubuntu3) oracular; urgency=medium
+
+  * Upload to oracular
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Thu, 02 May 2024 14:14:32 -0400
+
+xdg-desktop-portal (1.18.4-1ubuntu2) noble; urgency=medium
+
+  * Merge with Debian (LP: #2062394). Remaining change:
+    - Import https://github.com/flatpak/xdg-desktop-portal/pull/705 as a
+      distro-patch to add a portal for managing WebExtensions native messaging
+      servers
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Thu, 18 Apr 2024 17:00:47 -0400
+
+xdg-desktop-portal (1.18.4-1) unstable; urgency=medium
+
+  * New upstream stable release
+    - Don't allow sandboxed apps to specify commands starting with '-'
+      when generating .desktop files, mitigating CVE-2024-32462 in Flatpak
+    - Do not store device access permission as "denied by user" if there
+      was an error
+    - Fix a crash when config files don't specify a default backend
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 18 Apr 2024 18:58:16 +0100
+
+xdg-desktop-portal (1.18.3-1ubuntu1) noble; urgency=medium
+
+  * Merge with Debian. Remaining change:
+    - Import https://github.com/flatpak/xdg-desktop-portal/pull/705 as a
+      distro-patch (add a portal for managing WebExtensions native messaging
+      servers, LP: #1968215)
+      + debian/patches/webextensions-portal.patch
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Thu, 11 Apr 2024 18:21:31 -0400
+
+xdg-desktop-portal (1.18.3-1) unstable; urgency=medium
+
+  * Team upload
+  * New upstream bugfix release
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Thu, 04 Apr 2024 10:53:28 -0400
+
+xdg-desktop-portal (1.18.2-1ubuntu1) noble; urgency=medium
+
+  * Merge with Debian (LP: #2038110). Remaining change:
+    - Import https://github.com/flatpak/xdg-desktop-portal/pull/705 as a
+      distro-patch (add a portal for managing WebExtensions native messaging
+      servers, LP: #1968215)
+      + debian/patches/webextensions-portal.patch
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Mon, 27 Nov 2023 13:10:20 -0500
+
+xdg-desktop-portal (1.18.2-1) unstable; urgency=medium
+
+  * Team upload
+  * New upstream stable release
+  * Drop x-d-p-gtk fallback patch: applied in new release
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Mon, 27 Nov 2023 13:03:50 -0500
+
+xdg-desktop-portal (1.18.1-1) unstable; urgency=medium
+
+  * New upstream stable release
+  * d/copyright: Update
+  * d/rules: Explicitly enable sandboxed image validation.
+    This is the default, but for a security hardening mechanism, explicit
+    seems better than implicit.
+  * Change packaging branch to debian/latest
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 26 Oct 2023 19:28:38 +0100
+
+xdg-desktop-portal (1.18.0-1ubuntu1) mantic; urgency=medium
+
+  * Merge with Debian (LP: #2038110). Remaining change:
+    - Import https://github.com/flatpak/xdg-desktop-portal/pull/705 as a
+      distro-patch (add a portal for managing WebExtensions native messaging
+      servers, LP: #1968215)
+      + debian/patches/webextensions-portal.patch
+  * Dropped change:
+    - Keep alternative dependency to libgdk-pixbuf2.0-dev for easier backports
+      to Ubuntu 20.04 LTS or 18.04 LTS
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Mon, 02 Oct 2023 12:21:53 -0400
+
+xdg-desktop-portal (1.18.0-1) unstable; urgency=medium
+
+  * New upstream stable release
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 19 Sep 2023 12:01:57 +0100
+
+xdg-desktop-portal (1.17.2-1ubuntu1) mantic; urgency=medium
+
+  * Merge from Debian. Remaining changes:
+    - Import https://github.com/flatpak/xdg-desktop-portal/pull/705 as a
+      distro-patch (add a portal for managing WebExtensions native messaging
+      servers, LP: #1968215)
+      + debian/patches/webextensions-portal.patch
+    - Keep alternative dependency to libgdk-pixbuf2.0-dev for easier backports
+      to Ubuntu 20.04 LTS or 18.04 LTS
+  * Update webextension portal patch with latest version proposed upstream
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Tue, 05 Sep 2023 13:08:18 -0400
+
+xdg-desktop-portal (1.17.2-1) unstable; urgency=medium
+
+  * New upstream release
+  * Release to unstable
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 02 Sep 2023 10:27:12 +0100
+
+xdg-desktop-portal (1.17.1-1) experimental; urgency=medium
+
+  * New upstream release
+    - d/patches: Drop all patches, applied in new release
+  * d/control, d/x-d-p.manpages: Build and install portals.conf(5)
+  * d/NEWS: Add a NEWS file to direct users to portals.conf(5)
+  * d/p/debian/portal-impl-Hard-code-x-d-p-gtk-as-a-last-resort-fallback.patch:
+    Add patch to fall back to x-d-p-gtk if nothing better can be found.
+    This is a temporary measure to give desktop environment maintainers
+    a chance to add a portals.conf(5) for their desktop, and should be
+    removed later.
+
+ -- Simon McVittie <smcv@debian.org>  Mon, 28 Aug 2023 15:03:12 +0100
+
+xdg-desktop-portal (1.17.0-1) experimental; urgency=medium
+
+  * Team upload
+  * New upstream release
+    - Fixes portal delay with x-d-p-gnome 44 and non-GNOME desktops
+      (LP: #2013116) (Closes: #1032584)
+  * debian/control: Build-Depend on python3-dbusmock & python3-pytest
+    for build tests
+  * Drop all patches: applied in new release
+  * Cherry-pick 3 bug fixes from upstream repo
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Mon, 21 Aug 2023 16:33:43 -0400
+
+xdg-desktop-portal (1.16.0-3ubuntu1) mantic; urgency=medium
+
+  * Merge from Debian. Remaining changes:
+    - Import https://github.com/flatpak/xdg-desktop-portal/pull/705 as a
+      distro-patch (add a portal for managing WebExtensions native messaging
+      servers, LP: #1968215)
+      + debian/patches/webextensions-portal.patch
+    - Keep alternative dependency to libgdk-pixbuf2.0-dev for easier backports
+      to Ubuntu 20.04 LTS or 18.04 LTS
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 18 Aug 2023 09:07:20 -0400
+
+xdg-desktop-portal (1.16.0-3) unstable; urgency=medium
+
+  * d/patches: Update to upstream 1.16 branch commit 1.16.0-17-g2a219279
+    - Deal better with backends that are non-functional in desktop
+      environments other than the one they are intended for
+    - Improve handling of incorrect method calls from applications
+    - Extract app IDs from more systemd scope/slice/service names
+    - Update security support status in README
+    - Translation updates: be, gl, ka, oc, tr
+  * Update standards version to 4.6.2 (no changes needed)
+  * Remove version constraints unnecessary since Debian 11
+  * d/xdp.lintian-overrides: Silence some false positives (#1031037)
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 05 Aug 2023 15:33:04 +0100
+
+xdg-desktop-portal (1.16.0-2ubuntu1) lunar; urgency=medium
+
+  * Merge from Debian. Remaining changes:
+    - Import https://github.com/flatpak/xdg-desktop-portal/pull/705 as a
+      distro-patch (add a portal for managing WebExtensions native messaging
+      servers, LP: #1968215)
+      + debian/patches/webextensions-portal.patch
+  * d/p/webextensions-portal.patch: updated
+  * Keep alternative dependency to libgdk-pixbuf2.0-dev for easier backports
+    to Ubuntu 20.04 LTS or 18.04 LTS
+
+ -- Nathan Pratta Teodosio <nathan.teodosio@canonical.com>  Wed, 25 Jan 2023 15:33:03 -0300
+
+xdg-desktop-portal (1.16.0-2) unstable; urgency=medium
+
+  * d/patches: Add post-release bug fixes from upstream
+    - d/p/file-chooser-Set-writable-flag-correctly.patch:
+      Don't allow writing to files if not requested
+    - d/p/tests-List-lists-of-sources-one-per-line-in-alphabetical-.patch,
+      d/p/tests-Add-missing-dependency-on-permission-store-GDBus-he.patch:
+      Fix a race condition that was breaking bullseye-backports builds
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 10 Jan 2023 11:31:45 +0000
+
+xdg-desktop-portal (1.16.0-1ubuntu1) lunar; urgency=medium
+
+  * Merge from Debian. Remaining changes:
+    - Import https://github.com/flatpak/xdg-desktop-portal/pull/705 as a
+      distro-patch (add a portal for managing WebExtensions native messaging
+      servers, LP: #1968215)
+      + debian/patches/webextensions-portal.patch
+  * Update webextensions-portal.patch with latest proposed version
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Thu, 15 Dec 2022 10:39:43 -0500
+
+xdg-desktop-portal (1.16.0-1) unstable; urgency=medium
+
+  * New upstream release
+  * d/copyright: Update
+  * d/patches: Drop patches, included in the new release
+  * d/upstream/metadata: Add Security-Contact
+  * d/not-installed: Skip installation of an unnecessary file
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 13 Dec 2022 22:52:21 +0000
+
+xdg-desktop-portal (1.15.0-3) unstable; urgency=medium
+
+  * d/watch: Adapt to Github web page changes
+  * d/control: Canonicalize case of Multi-Arch field
+  * d/p/meson-In-installed-tests-invoke-test-portals-once-per-por.patch:
+    Update patch to the version that was applied upstream
+  * d/p/test-portals-Include-utils-even-if-libportal-is-unavailab.patch,
+    d/p/tests-Don-t-apply-Meson-s-strict-TAP-parsing-for-older-GL.patch,
+    d/p/tests-Include-src-glib-backports.h-where-needed.patch,
+    d/p/glib-backports-Declare-stub-function-as-inline.patch:
+    Add patches from upstream needed for the Debian 11 backport
+  * d/patches: Add selected bug fixes from upstream git
+    - Move xdg-permission-store to the systemd slice appropriate for
+      session services used to support applications
+    - Improve systemd service management so our services do not linger after
+      graphical-session.target has exited
+    - Documentation fixes
+    - Make o.fd.portal.Screenshot.Version mirror
+      o.fd.portal.impl.Screenshot.Version so that clients can discover
+      whether the backend implements PickColor()
+    - Add a missing Qt type annotation to the Request.Response signal
+  * d/patches: Add localization updates from upstream
+  * Build-/test-depend on dbus-daemon instead of dbus
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 22 Nov 2022 10:38:32 +0000
+
+xdg-desktop-portal (1.15.0-2) unstable; urgency=medium
+
+  * Release to unstable.
+    xdg-desktop-portal-gnome needs features of this version, and a 1.16.0
+    stable release is intended to happen before the freeze.
+  * d/control: Drop compatibility with old libgdk-pixbuf2.0-dev package.
+    libgdk-pixbuf-2.0-dev has been available since bullseye.
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 15 Sep 2022 19:20:27 +0100
+
+xdg-desktop-portal (1.15.0-1ubuntu1) kinetic; urgency=medium
+
+  * Merge from Debian. Remaining changes:
+    - Import https://github.com/flatpak/xdg-desktop-portal/pull/705 as a
+      distro-patch (add a portal for managing WebExtensions native messaging
+      servers, LP: #1968215)
+      + debian/patches/webextensions-portal.patch
+  * Update webextensions-portal.patch with latest proposed version
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Mon, 15 Aug 2022 06:59:02 -0400
+
+xdg-desktop-portal (1.15.0-1) experimental; urgency=medium
+
+  * New upstream development release
+  * Switch to experimental branch
+    - d/watch: Watch for development releases
+    - d/gbp.conf, d/control: Use debian/experimental packaging branch
+  * d/control, d/rules: Build using Meson
+  * Add patch to split up installed-tests coverage for test-portals.
+    This will make it easier to distinguish between tests that are stable
+    when run as an autopkgtest, and tests that are not.
+
+ -- Simon McVittie <smcv@debian.org>  Sun, 14 Aug 2022 21:08:48 +0100
+
+xdg-desktop-portal (1.14.6-1) unstable; urgency=medium
+
+  * New upstream stable release
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 04 Aug 2022 09:17:19 +0100
+
+xdg-desktop-portal (1.14.5-1) unstable; urgency=medium
+
+  * New upstream stable release
+  * Standards-Version: 4.6.1 (no changes required)
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 19 Jul 2022 18:58:07 +0100
+
+xdg-desktop-portal (1.14.4-1ubuntu1) kinetic; urgency=medium
+
+  * Merge from Debian. Remaining changes:
+    - Import https://github.com/flatpak/xdg-desktop-portal/pull/705 as a
+      distro-patch (add a portal for managing WebExtensions native messaging
+      servers, LP: #1968215)
+      + debian/patches/webextensions-portal.patch
+
+ -- Olivier Tilloy <olivier.tilloy@canonical.com>  Mon, 13 Jun 2022 11:21:47 +0200
+
+xdg-desktop-portal (1.14.4-1) unstable; urgency=medium
+
+  * New upstream stable release
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 05 May 2022 15:14:29 +0100
+
+xdg-desktop-portal (1.14.3-1) unstable; urgency=medium
+
+  * New upstream stable release
+
+ -- Simon McVittie <smcv@debian.org>  Fri, 15 Apr 2022 16:30:43 +0100
+
+xdg-desktop-portal (1.14.3-0ubuntu3) kinetic; urgency=medium
+
+  * Update the native messaging portal patch to pick up a new commit
+    - debian/patches/webextensions-portal.patch
+
+ -- Olivier Tilloy <olivier.tilloy@canonical.com>  Wed, 11 May 2022 11:06:32 +0200
+
+xdg-desktop-portal (1.14.3-0ubuntu2) jammy; urgency=medium
+
+  * New upstream stable release
+    - Fixes crash with Teamviewer's experimental Wayland support
+      (LP: #1966945)
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Fri, 15 Apr 2022 15:17:26 -0400
+
+xdg-desktop-portal (1.14.2-1ubuntu2) jammy; urgency=medium
+
+  * Update the native messaging portal patch to pick up new commits
+    - debian/patches/webextensions-portal.patch
+
+ -- Olivier Tilloy <olivier.tilloy@canonical.com>  Mon, 11 Apr 2022 18:47:05 +0200
+
+xdg-desktop-portal (1.14.2-1ubuntu1) jammy; urgency=medium
+
+  * Import https://github.com/flatpak/xdg-desktop-portal/pull/705 as a
+    distro-patch (add a portal for managing WebExtensions native messaging
+    servers, LP: #1968215)
+    - debian/patches/webextensions-portal.patch
+
+ -- Olivier Tilloy <olivier.tilloy@canonical.com>  Fri, 08 Apr 2022 11:16:45 +0200
+
+xdg-desktop-portal (1.14.2-1) unstable; urgency=medium
+
+  * New upstream release
+  * Drop patches, applied upstream
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 31 Mar 2022 12:11:22 +0100
+
+xdg-desktop-portal (1.14.1-2) unstable; urgency=medium
+
+  * d/x-d-p.postinst: Clean up enabled state of x-d-p.service on upgrades.
+    When we upgrade from 1.14.0 to 1.14.1, we want to remove
+    /etc/systemd/user/graphical-session-pre.target.wants/xdg-desktop-portal.service
+    so that it will not cause a deadlock during GNOME login.
+  * d/p/Move-g_string_replace-backport-to-a-separate-translation-.patch,
+    d/p/rewrite-launchers-Provide-backported-g_string_replace.patch:
+    Add patches to fix compilation with GLib 2.66, to make backports more
+    straightforward.
+
+ -- Simon McVittie <smcv@debian.org>  Sun, 27 Mar 2022 13:05:55 +0100
+
+xdg-desktop-portal (1.14.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * d/p/Revert-Make-x-d-p-start-on-session-start.patch:
+    Drop patch, the problem was fixed differently upstream
+  * Package the new xdg-desktop-portal-rewrite-launchers executable
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 19 Mar 2022 14:08:29 +0000
+
+xdg-desktop-portal (1.14.0-2) unstable; urgency=medium
+
+  * d/p/Revert-Make-x-d-p-start-on-session-start.patch:
+    Revert starting xdg-desktop-portal during session start.
+    This causes a new GNOME login after a reboot to deadlock.
+
+ -- Simon McVittie <smcv@debian.org>  Fri, 18 Mar 2022 11:16:06 +0000
+
+xdg-desktop-portal (1.14.0-1) unstable; urgency=medium
+
+  * New upstream release
+  * Drop patches restoring the icon validator.
+    It has been reinstated upstream.
+  * Depend and build-depend on FUSE 3
+  * d/control, d/rules: Build with libsystemd
+
+ -- Simon McVittie <smcv@debian.org>  Fri, 18 Mar 2022 09:17:39 +0000
+
+xdg-desktop-portal (1.12.2-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 17 Mar 2022 23:25:45 +0000
+
+xdg-desktop-portal (1.12.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * Drop patches that were applied upstream
+  * d/copyright: Update
+
+ -- Simon McVittie <smcv@debian.org>  Wed, 22 Dec 2021 15:46:31 +0000
+
+xdg-desktop-portal (1.10.1-4) unstable; urgency=medium
+
+  * Upload to unstable.
+    The libportal-based build-time test coverage passes on all release
+    architectures.
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 16 Nov 2021 10:30:39 +0000
+
+xdg-desktop-portal (1.10.1-3) experimental; urgency=medium
+
+  * d/gbp.conf: Branch for experimental
+  * d/control, d/rules: Enable libportal now that it is available in testing
+
+ -- Simon McVittie <smcv@debian.org>  Mon, 15 Nov 2021 20:37:48 +0000
+
+xdg-desktop-portal (1.10.1-2) unstable; urgency=medium
+
+  * d/p/open-uri-Avoid-calling-into-o.fd.FileManager1-during-star.patch:
+    Add proposed patch to resolve deadlock with some file managers.
+    This avoids a long delay during startup of GtkApplication-based
+    implementations of the o.fd.FileManager1 interface, such as XFCE's
+    Thunar, in a non-GNOME and non-XFCE environment. (Closes: #994865)
+  * d/p/build-Fix-cross-compilation-by-adjusting-pkg-config-use.patch:
+    Add proposed patch to fix cross-compilation.
+    Thanks to Helmut Grohne (Closes: #985411)
+
+ -- Simon McVittie <smcv@debian.org>  Fri, 01 Oct 2021 23:29:32 +0100
+
+xdg-desktop-portal (1.10.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * Standards-Version: 4.6.0 (no changes required)
+  * d/rules: Stop working around wrong permissions on test-document-fuse.py.
+    This was fixed upstream.
+  * Don't let debhelper 13 make installed-tests data executable
+  * Use debhelper compat level 13
+    - No need to override dh_missing any more
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 21 Sep 2021 17:21:24 +0100
+
+xdg-desktop-portal (1.8.1-1) unstable; urgency=medium
+
+  * New upstream release
+    - Fix a fd leak when opening URIs
+    - Fix directory support in filechooser
+    - Improve Snap support
+    - Fix a crash when setting wallpaper fails
+  * Drop fontconfig build-dependency, no longer needed
+  * Define _GNU_SOURCE when compiling the icon validator,
+    avoiding an implicit declaration of execvpe()
+  * Label the icon validator as coming from Flatpak 1.10.1
+    (no actual changes, the code is identical to 1.8.1)
+
+ -- Simon McVittie <smcv@debian.org>  Fri, 19 Feb 2021 10:21:45 +0000
+
+xdg-desktop-portal (1.8.0-3) unstable; urgency=medium
+
+  * debian/rules: Build with pipewire support in ubuntu as well (LP: #1879580)
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Thu, 11 Feb 2021 19:08:03 +0100
+
+xdg-desktop-portal (1.8.0-2) unstable; urgency=medium
+
+  * Version the build-dependency on libflatpak-dev.
+    This is significant when backporting to buster.
+  * Preferentially build-depend on libgdk-pixbuf-2.0-dev.
+    We don't need the deprecated Xlib integration that is also pulled in
+    by the older libgdk-pixbuf2.0-dev package (see #974870).
+  * Standards-Version: 4.5.1 (no changes required)
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 24 Nov 2020 12:01:38 +0000
+
+xdg-desktop-portal (1.8.0-1) unstable; urgency=medium
+
+  * New upstream release
+    - Drop most patches, applied upstream
+
+ -- Simon McVittie <smcv@debian.org>  Wed, 16 Sep 2020 10:31:24 +0100
+
+xdg-desktop-portal (1.7.2-2) unstable; urgency=medium
+
+  * d/rules: Don't explicitly use --as-needed linker option.
+    It's the default with bullseye toolchains.
+  * Release to unstable as part of the pipewire 0.3 transition
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 10 Sep 2020 12:32:17 +0100
+
+xdg-desktop-portal (1.7.2-1) experimental; urgency=medium
+
+  * New upstream development release
+  * Drop patch skipping FUSE tests if necessary,
+    upstream made an equivalent change
+  * Update icon validator to the one from Flatpak 1.8.1
+  * Build-Depend on libcap2-bin, for capsh, and add it to test dependencies
+  * tests: Look for capsh in /sbin
+  * Update patches.
+    This includes upstream 1.7.2-37-g089e72b plus merge request
+    <https://github.com/flatpak/xdg-desktop-portal/pull/521>,
+    to make the installed-tests work better.
+  * d/tests/gnome-desktop-testing: Set TEST_IN_CI.
+    Upstream uses this to extend test timeouts and skip flaky tests.
+  * Re-enable pipewire now that 0.3.x is in experimental
+
+ -- Simon McVittie <smcv@debian.org>  Mon, 07 Sep 2020 19:41:23 +0100
+
+xdg-desktop-portal (1.7.1-1) experimental; urgency=medium
+
+  * New upstream development release
+
+ -- Simon McVittie <smcv@debian.org>  Mon, 30 Mar 2020 10:19:22 +0100
+
+xdg-desktop-portal (1.7.0-1) experimental; urgency=medium
+
+  * Switch to experimental branch
+    - d/watch: Watch for development releases
+    - d/gbp.conf, d/control: Use debian/experimental packaging branch
+    - d/gbp.conf: Use upstream/latest branch
+  * New upstream development release
+  * Disable pipewire until 0.3.x is available (#954022)
+  * Drop patches that were applied upstream
+  * Set upstream metadata fields: Repository.
+  * Remove obsolete field Name from debian/upstream/metadata (already
+    present in machine-readable debian/copyright).
+  * Standards-Version: 4.5.0 (no changes required)
+  * d/p/tests-Divert-service-stdout-to-stderr.patch: Simplify
+  * tests: Depend on procps, for /bin/kill
+  * tests: Depend on python3 and python3-gi
+  * Add a patch to skip (more) FUSE tests on buildds
+
+ -- Simon McVittie <smcv@debian.org>  Wed, 25 Mar 2020 16:00:52 +0000
+
+xdg-desktop-portal (1.6.0-1) unstable; urgency=medium
+
+  * New upstream stable release
+    - d/watch: Only watch for stable releases
+    - d/gbp.conf: Use debian/master, upstream/1.6.x branches
+  * Mention #946913 in previous changelog entry
+  * Add "unsafe" pkg.libportal.enable build option to enable extra tests
+    while libportal is not yet API-stable
+  * d/p/Fix-the-build-on-old-glib.patch,
+    d/p/xml-Avoid-fancy-quotes.patch:
+    Add post-release fixes from upstream
+  * d/p/open-uri-Fix-criticals-if-no-default-handler-for-desired-.patch,
+    d/p/tests-Fix-race-condition-in-various-Lockdown-tests.patch,
+    d/p/tests-Skip-Location-tests-if-we-have-no-D-Bus-system-bus.patch,
+    d/p/tests-Install-test-backends.patch,
+    d/p/tests-When-installed-look-for-executables-in-libexecdir.patch,
+    d/p/tests-Install-test.portal-for-installed-tests.patch:
+    Fix some test failures when libportal is enabled
+  * d/p/tests-Divert-service-stdout-to-stderr.patch,
+    d/p/tests-Always-produce-verbose-output-from-subprocesses.patch:
+    Improve test diagnostics
+  * d/p/Replace-the-icon-validator-with-the-one-from-Flatpak-1.6..patch:
+    Relabel the icon validator as coming from Flatpak 1.6.0
+    (it's the same as 1.4.2)
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 24 Dec 2019 14:15:27 +0000
+
+xdg-desktop-portal (1.5.4-1) experimental; urgency=medium
+
+  * Branch for experimental
+  * New upstream development release
+    - d/patches: Rebase
+    - d/rules: Explicitly disable libportal-based tests (ITP: #946605)
+    - Only log one warning if unable to track which apps are "in the
+      background, for example x-d-p-gtk in a non-GNOME environment
+      (Closes: #946913)
+
+ -- Simon McVittie <smcv@debian.org>  Fri, 13 Dec 2019 23:23:14 +0000
+
+xdg-desktop-portal (1.4.2-3) unstable; urgency=medium
+
+  * Standards-Version: 4.4.1 (no changes required)
+  * Re-enable pipewire (screen recording) support now that v0.2.7 is
+    available
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 02 Nov 2019 10:12:41 +0000
+
+xdg-desktop-portal (1.4.2-2) unstable; urgency=medium
+
+  * Release to unstable
+  * d/salsa-ci.yml: Request standard CI on salsa.debian.org
+  * d/p/test-doc-portal-Check-for-FUSE-support-more-thoroughly.patch:
+    Skip tests when FUSE is non-functional, even if we are root
+  * Standards-Version: 4.4.0 (no changes required)
+  * Use debhelper-compat 12
+    - Remove redundant --libexecdir=/usr/libexec, which is the default
+      at this compat level
+  * d/p/Replace-the-icon-validator-with-the-one-from-Flatpak-1.4..patch:
+    Update icon validator to the one from Flatpak 1.4.2
+  * Mark autopkgtest as flaky due to #931726
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 16 Jul 2019 09:19:47 +0100
+
+xdg-desktop-portal (1.4.2-1) experimental; urgency=medium
+
+  * New upstream release
+  * Disable pipewire (screencasting) until 0.2.6 is available in Debian
+  * Build-depend on libjson-glib-dev
+  * d/copyright: Update
+
+ -- Simon McVittie <smcv@debian.org>  Mon, 10 Jun 2019 09:37:22 +0100
+
+xdg-desktop-portal (1.2.0-1) unstable; urgency=medium
+
+  [ Simon McVittie ]
+  * New upstream stable release
+  * d/watch: Only watch for stable releases
+  * d/p/Revert-Stop-building-the-icon-validator.patch,
+    d/p/validate-icon-Add-a-define-for-bwrap.patch,
+    d/p/Replace-the-icon-validator-with-the-one-from-Flatpak-git-.patch:
+    Build a copy of the icon validator from Flatpak git master.
+    We don't want to rely on a version of Flatpak that isn't
+    stable yet.
+    - d/p/notification-Handle-non-existing-directories.patch,
+      d/p/notification-bind-mount-etc-ld.so.cache-to-the-sandbox.patch:
+      Remove, no longer necessary
+  * d/upstream/metadata: Add DEP-12 metadata
+  * Release to unstable
+
+  [ Jeremy Bicha ]
+  * Don't enable remote desktop support on Ubuntu. See LP bug 1802533
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 26 Jan 2019 18:31:50 +0000
+
+xdg-desktop-portal (1.1.1-1) experimental; urgency=medium
+
+  * New upstream development release
+    - Drop patches, applied upstream
+    - Build-Depend on libgdk-pixbuf2.0-dev, for icon validation
+    - Package new xdg-desktop-portal-validate-icon executable
+    - Depend on bubblewrap, for sandboxed icon validation
+  * Enable Location portal (geoclue-2.0)
+  * Standards-Version: 4.3.0 (no changes required)
+  * d/control: Set Vcs-Git branch for experimental
+  * d/p/notification-Handle-non-existing-directories.patch,
+    d/p/notification-bind-mount-etc-ld.so.cache-to-the-sandbox.patch:
+    Make bwrap invocation more reliable, and in particular make it
+    work on purely 32-bit systems with no /lib64 (patches taken from
+    gnome-desktop, thanks to Iain Lane and Mart Raudsepp)
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 17 Jan 2019 09:57:59 +0000
+
+xdg-desktop-portal (1.1.0-1) experimental; urgency=medium
+
+  * New upstream development release
+    - d/copyright: Update
+    - d/control: Build-depend on fontconfig, for fontconfig cache
+      invalidation in Settings portal
+    - d/control: Build-depend on flatpak, for permission-store test
+  * Don't build with Location portal yet, because geoclue-2.0 is
+    currently too old
+  * Drop patch, applied upstream
+  * d/gbp.conf: Use debian/experimental branch
+  * d/patches: Skip another build-time test when FUSE is not supported
+  * d/patches: Don't show a critical warning when a document permissions
+    entry is removed
+  * Enable Pipewire support, for screencasting
+
+ -- Simon McVittie <smcv@debian.org>  Mon, 19 Nov 2018 18:47:57 +0000
+
+xdg-desktop-portal (1.0.3-1) unstable; urgency=medium
+
+  * New upstream release
+  * d/p/desktop-portal-don-t-attempt-to-export-NULL-GDBusInterfac.patch:
+    Add patch from upstream to guard against NULL interface objects
+    (previously applied in Ubuntu, LP: #1691649)
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 13 Oct 2018 11:33:35 +0100
+
+xdg-desktop-portal (1.0.2-1) unstable; urgency=medium
+
+  * New upstream release
+  * d/p/network-monitor-Build-variants-for-GetStatus-correctly.patch:
+    Drop, superseded by upstream changes
+
+ -- Simon McVittie <smcv@debian.org>  Mon, 10 Sep 2018 10:37:46 +0100
+
+xdg-desktop-portal (1.0.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * d/p/network-monitor-Build-variants-for-GetStatus-correctly.patch:
+    Add patch to make NetworkMonitor.GetStatus() work as intended
+  * Standards-Version: 4.2.1 (no changes required)
+
+ -- Simon McVittie <smcv@debian.org>  Fri, 31 Aug 2018 08:55:19 +0100
+
+xdg-desktop-portal (1.0-1) unstable; urgency=medium
+
+  * New upstream release
+  * Install upstream NEWS
+  * Standards-Version: 4.2.0 (no further changes)
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 23 Aug 2018 09:53:13 +0100
+
+xdg-desktop-portal (0.99-1) unstable; urgency=medium
+
+  * New upstream release
+  * Standards-Version: 4.1.5
+  * Install to /usr/libexec
+  * Build in a UTF-8 locale, to avoid FTBFS when gdbus-codegen reads
+    UTF-8
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 28 Jul 2018 12:28:48 +0100
+
+xdg-desktop-portal (0.11-2) unstable; urgency=medium
+
+  [ Jeremy Bicha ]
+  * Update package description to mention Snap
+  * Use github page as homepage
+
+ -- Simon McVittie <smcv@debian.org>  Sun, 24 Jun 2018 22:02:48 +0100
+
+xdg-desktop-portal (0.11-1) unstable; urgency=medium
+
+  * New upstream release
+    - Drop patch, applied upstream
+  * Standards-Version: 4.1.4 (no changes)
+
+ -- Simon McVittie <smcv@debian.org>  Wed, 25 Apr 2018 16:29:22 +0100
+
+xdg-desktop-portal (0.10-4) unstable; urgency=medium
+
+  * Merge from experimental, with autopkgtests included
+  * d/p/build-Run-install-test-data-hook-as-intended.patch:
+    Mark patch as applied upstream
+
+ -- Simon McVittie <smcv@debian.org>  Fri, 16 Feb 2018 14:50:44 +0000
+
+xdg-desktop-portal (0.10-3) experimental; urgency=medium
+
+  * Reinstate xdg-desktop-portal-tests package and autopkgtests
+  * d/p/build-Run-install-test-data-hook-as-intended.patch:
+    Run the tests' install hook to set up enough symlinks that they
+    will pass
+  * Upload to experimental to wait for NEW processing
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 15 Feb 2018 00:30:01 +0000
+
+xdg-desktop-portal (0.10-2) unstable; urgency=medium
+
+  * Really remove xdg-desktop-portal-tests stanza from d/control
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 15 Feb 2018 00:01:42 +0000
+
+xdg-desktop-portal (0.10-1) unstable; urgency=medium
+
+  * New upstream release
+  * Add Breaks/Replaces for flatpak (<< 0.10.4-1~) since this package
+    has taken over the permission store and documents portal
+  * Disable Pipewire support for now (ITP: #874089)
+  * Add new build-dependencies for FUSE
+  * Install the permission store and documents portal
+  * d/copyright: Update
+  * Drop flatpak build-dependency, no longer needed
+  * Remove patches, applied upstream
+  * Depend on FUSE
+  * Build installed-tests, but don't install them for now to avoid the
+    NEW queue
+  * Use dh_missing --fail-missing instead of dh_install --fail-missing
+
+ -- Simon McVittie <smcv@debian.org>  Wed, 14 Feb 2018 17:44:15 +0000
+
+xdg-desktop-portal (0.9-2) unstable; urgency=medium
+
+  * Standards-Version: 4.1.3 (no changes)
+  * Change Vcs-* to point to salsa.debian.org
+  * d/p/0.10/: Update to upstream git commit 0.9-9-g422ecf3 for various
+    bug fixes
+
+ -- Simon McVittie <smcv@debian.org>  Thu, 18 Jan 2018 08:46:29 +0000
+
+xdg-desktop-portal (0.9-1) unstable; urgency=medium
+
+  * New upstream release
+    - Drop all patches, applied upstream
+
+ -- Simon McVittie <smcv@debian.org>  Fri, 24 Nov 2017 10:38:16 +0000
+
+xdg-desktop-portal (0.8-3) unstable; urgency=medium
+
+  * Set Rules-Requires-Root to no
+  * Use https Format URL in d/copyright
+  * Standards-Version: 4.1.1 (no further changes)
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 11 Nov 2017 13:43:41 +0000
+
+xdg-desktop-portal (0.8-2) unstable; urgency=medium
+
+  * Mark patches as applied upstream for 0.9
+  * Upload to unstable
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 10 Jun 2017 10:12:20 +0100
+
+xdg-desktop-portal (0.8-1) experimental; urgency=medium
+
+  * New upstream release
+  * Add patches to make the development files completely
+    architecture-independent (Closes: #864451)
+  * Make xdg-desktop-portal-dev Architecture: all
+
+ -- Simon McVittie <smcv@debian.org>  Fri, 09 Jun 2017 08:04:12 +0100
+
+xdg-desktop-portal (0.6-1) experimental; urgency=medium
+
+  * New upstream release
+    - Run as a systemd user service if dbus-user-session is installed
+    - Add email portal
+  * Move to debhelper compat level 10
+  * Omit unimplemented configure option --enable-installed-tests
+  * Do not explicitly disable quiet Automake output: dh now does this
+    by default
+  * Move API documentation from main package to -dev package
+  * Register API documentation with doc-base
+
+ -- Simon McVittie <smcv@debian.org>  Mon, 03 Apr 2017 15:28:02 +0100
+
+xdg-desktop-portal (0.5-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 21 Jan 2017 16:28:36 +0000
+
+xdg-desktop-portal (0.4-1) unstable; urgency=medium
+
+  * New upstream release
+    - Drop cherry-picked patch for flatpak 0.6.10 container detection,
+      now included in the upstream release
+
+ -- Simon McVittie <smcv@debian.org>  Mon, 05 Dec 2016 10:51:02 +0000
+
+xdg-desktop-portal (0.3-1) unstable; urgency=medium
+
+  * Initial release. (Closes: #831689)
+
+ -- Simon McVittie <smcv@debian.org>  Wed, 21 Sep 2016 22:14:13 +0100
