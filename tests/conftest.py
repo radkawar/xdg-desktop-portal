@@ -365,7 +365,7 @@ def required_templates() -> dict[str, dict[str, Any]]:
 def templates(
     required_templates: dict[str, dict[str, Any]],
     template_params: dict[str, dict[str, Any]],
-) -> Iterator[None]:
+) -> Iterator[dict[dbusmock.BusType, dict[str, dbusmock.SpawnedMock]]]:
     """
     Fixture which starts the required templates with their parameters. Usually
     the `portals` fixture is what you're looking for because it also starts
@@ -380,7 +380,7 @@ def templates(
         assert template
         params = template_params.get(template, params)
         _start_template(busses, template, bus_name, params)
-    yield
+    yield busses
     _terminate_servers(busses)
 
 

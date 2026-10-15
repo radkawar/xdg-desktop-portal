@@ -127,10 +127,29 @@ xdp_session_lookup (const char *session_handle)
   return g_steal_pointer (&session);
 }
 
+static gboolean
+has_same_impl_owner (XdpSession *session)
+{
+  g_autofree char *owner = NULL;
+
+  if (!session->impl_session)
+    return FALSE;
+
+  owner = g_dbus_proxy_get_name_owner (G_DBUS_PROXY (session->impl_session));
+  return owner && g_strcmp0 (owner, session->impl_name_owner) == 0;
+}
+
 gboolean
 xdp_session_export (XdpSession  *session,
                     GError     **error)
 {
+  if (session->impl_dbus_name && !has_same_impl_owner (session))
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_CLOSED,
+                   "Session implementation disappeared");
+      return FALSE;
+    }
+
   if (!g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (session),
                                          session->connection,
                                          session->id,
@@ -291,6 +310,24 @@ on_closed (XdpDbusImplSession *object, GObject *data)
   xdp_session_close (session, TRUE);
 }
 
+static void
+on_impl_name_owner_changed (GObject    *object,
+                            GParamSpec *pspec,
+                            XdpSession *session)
+{
+  SESSION_AUTOLOCK_UNREF (g_object_ref (session));
+
+  if (session->closed ||
+      object != G_OBJECT (session->impl_session) ||
+      has_same_impl_owner (session))
+    return;
+
+  /* Never send Close to a replacement implementation or reactivate one. */
+  g_clear_object (&session->impl_session);
+  if (session->exported)
+    xdp_session_close (session, TRUE);
+}
+
 static gboolean
 xdp_session_authorize_callback (GDBusInterfaceSkeleton *interface,
                                 GDBusMethodInvocation  *invocation,
@@ -378,6 +415,8 @@ xdp_session_initable_init (GInitable     *initable,
       g_signal_connect (impl_session, "closed", G_CALLBACK (on_closed), session);
 
       session->impl_session = g_steal_pointer (&impl_session);
+      session->impl_name_owner =
+        g_dbus_proxy_get_name_owner (G_DBUS_PROXY (session->impl_session));
     }
 
   session->id = g_steal_pointer (&id);
@@ -387,6 +426,10 @@ xdp_session_initable_init (GInitable     *initable,
   g_signal_connect (session, "g-authorize-method",
                     G_CALLBACK (xdp_session_authorize_callback),
                     session->sender);
+
+  if (session->impl_session)
+    g_signal_connect (session->impl_session, "notify::g-name-owner",
+                      G_CALLBACK (on_impl_name_owner_changed), session);
 
   return TRUE;
 }
@@ -487,6 +530,7 @@ xdp_session_finalize (GObject *object)
 
   g_clear_object (&session->impl_connection);
   g_free (session->impl_dbus_name);
+  g_free (session->impl_name_owner);
   g_clear_object (&session->impl_session);
 
   g_free (session->app_id);
